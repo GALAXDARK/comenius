@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administración de Usuarios</title>
+  <style>
+    /* Utilizar los estilos proporcionados */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+
+    main {
+      padding: 2em;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.5em 1em;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      margin-top: 1em;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.5em;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    /* Estilos para tablets */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 calc(50% - 1em);
+  }
+}
+
+/* Estilos para móviles */
+@media (max-width: 480px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 100%;
+  }
+
+  main {
+    padding: 1em;
+  }
+
+  header {
+    padding: 0.5em 0;
+  }
+
+  footer {
+    padding: 0.5em 0;
+  }
+
+  .btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Administración de Usuarios</h1>
+  </header>
+  <main>
+    <div class="container">
+      <h2>Lista de Usuarios</h2>
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    // Cargar usuarios y mostrarlos en la tabla
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const userTable = document.getElementById('userTable').querySelector('tbody');
+
+    function displayUsers() {
+      userTable.innerHTML = '';
+      users.forEach((user, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.username}</td>
+          <td>${user.role}</td>
+          <td>
+            <button class="btn edit-btn" data-index="${index}">Editar</button>
+            <button class="btn delete-btn" data-index="${index}">Eliminar</button>
+          </td>
+        `;
+        userTable.appendChild(row);
+      });
+    }
+
+    displayUsers();
+
+    // Manejar la edición de usuarios
+    userTable.addEventListener('click', function(e) {
+      if (e.target.classList.contains('edit-btn')) {
+        const index = e.target.getAttribute('data-index');
+        window.location.href = `edit.html?index=${index}`;
+      } else if (e.target.classList.contains('delete-btn')) {
+        const index = e.target.getAttribute('data-index');
+        users.splice(index, 1);
+        localStorage.setItem('users', JSON.stringify(users));
+        displayUsers();
+      }
+    });
+  </script>
+</body>
+</html>

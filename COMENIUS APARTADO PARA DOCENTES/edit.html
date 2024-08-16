@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Usuario</title>
+  <style>
+    /* Utilizar los estilos proporcionados */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+
+    main {
+      padding: 2em;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    
+
+    .btn {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 0.5em 1em;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      margin-top: 1em;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Estilos para tablets */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 calc(50% - 1em);
+  }
+}
+
+/* Estilos para móviles */
+@media (max-width: 480px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 100%;
+  }
+
+  main {
+    padding: 1em;
+  }
+
+  header {
+    padding: 0.5em 0;
+  }
+
+  footer {
+    padding: 0.5em 0;
+  }
+
+  .btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Editar Usuario</h1>
+  </header>
+  <main>
+    <div class="container">
+        <div class="log"> 
+      <h3> Editar Usuario</h3>
+        </div>
+        <br>
+        
+      <form id="editForm">
+        <input type="hidden" id="editIndex">
+        <label for="editUsername">Usuario:</label>
+        <br>
+
+        <input type="text" id="editUsername" name="editUsername" required>   
+        <br><br>
+
+        <label for="editPassword">Contraseña:</label>
+        <br>
+
+        <input type="password" id="editPassword" name="editPassword" required>
+        <input type="checkbox" id="showPasswordEdit"> Mostrar Contraseña
+        <br><br>
+        
+        <label for="editRole">Rol:</label>
+        <br>
+        <select id="editRole" name="editRole" required>
+          <option value="user">Usuario</option>
+          <option value="admin">Administrador</option>
+        </select>
+        <br>
+        <button type="submit" class="btn">Guardar Cambios</button>
+        <button type="button" class="btn" id="cancelButton">Cancelar</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const index = params.get('index');
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const user = users[index];
+
+      document.getElementById('editIndex').value = index;
+      document.getElementById('editUsername').value = user.username;
+      document.getElementById('editPassword').value = user.password;
+      document.getElementById('editRole').value = user.role;
+
+      // Guardar cambios de edición
+      document.getElementById('editForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('editUsername').value;
+        const password = document.getElementById('editPassword').value;
+        const role = document.getElementById('editRole').value;
+
+        users[index] = { username, password, role };
+        localStorage.setItem('users', JSON.stringify(users));
+
+        window.location.href = 'main.html';
+      });
+
+      // Mostrar/ocultar contraseña en la edición de usuarios
+      document.getElementById('showPasswordEdit').addEventListener('change', function() {
+        const passwordField = document.getElementById('editPassword');
+        if (this.checked) {
+          passwordField.type = 'text';
+        } else {
+          passwordField.type = 'password';
+        }
+      });
+
+      // Manejar el botón de cancelar
+      document.getElementById('cancelButton').addEventListener('click', function() {
+        window.location.href = 'main.html';
+      });
+    });
+  </script>
+</body>
+</html>
