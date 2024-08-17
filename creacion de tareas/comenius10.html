@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Aviso</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    height: 100%;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2em;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 1em;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+}
+
+.nav-links a:hover {
+    background-color: #45a049;
+}
+
+main {
+    padding: 2em;
+}
+
+footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+h2 {
+    color: #4CAF50;
+}
+
+h3 {
+    color: #333;
+}
+
+.menu-list, .class-list, .task-list, .message-list, .bloc-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.menu-list {
+align-items: center;
+
+}
+
+.container {
+    position: relative;
+    height: 100vh;
+}
+
+.menu-item, .class-card, .task-item, .message-card, .note-item {
+    background-color: white;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(33.333% - 1em);
+    cursor: pointer;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5em 1em;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    margin-top: 1em;
+    
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 1em;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Estilos específicos para Bloc de Notas */
+.bloc-container {
+    margin-bottom: 2em;
+}
+
+form label {
+    display: block;
+    margin-top: 1em;
+}
+
+form input[type="text"], form textarea, form input[type="date"] {
+    width: 100%;
+    padding: 0.5em;
+    margin-top: 0.5em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.note-item {
+    list-style-type: none;
+    margin-bottom: 1em;
+}
+
+.note-item h4 {
+    margin: 0 0 0.5em 0;
+}
+
+.note-item p {
+    margin: 0.5em 0;
+}
+
+/* Estilos para tablets */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links li {
+        margin-left: 0;
+        margin-top: 0.5em;
+    }
+
+    .menu-item, .class-card, .task-item, .message-card, .note-item {
+        flex: 1 1 calc(50% - 1em);
+    }
+}
+
+/* Estilos para móviles */
+@media (max-width: 480px) {
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links li {
+        margin-left: 0;
+        margin-top: 0.5em;
+    }
+
+    .menu-item, .class-card, .task-item, .message-card, .note-item {
+        flex: 1 1 100%;
+    }
+
+    main {
+        padding: 1em;
+    }
+
+    header {
+        padding: 0.5em 0;
+    }
+
+    footer {
+        padding: 0.5em 0;
+    }
+
+    .btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Crear Aviso</h1>
+    </header>
+    <main class="container">
+        <form id="taskForm">
+            <label for="taskName">Nombre de la Tarea</label>
+            <input type="text" id="taskName" name="taskName" required>
+
+            <label for="taskDescription">Descripción de la Tarea</label>
+            <textarea id="taskDescription" name="taskDescription" required></textarea>
+
+            <label for="taskDueDate">Fecha Límite de Entrega</label>
+            <input type="date" id="taskDueDate" name="taskDueDate" required>
+
+            <button type="submit" class="btn">Enviar</button>
+            <button type="button" class="btn" onclick="resetForm()">Cancelar</button>
+            <button class="btn" onclick="goToPage('comenius.html')">Regresar</button>
+        </form>
+    </main>
+  
+    
+    <script src="comenius10.js"></script>
+</body>
+</html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const taskForm = document.getElementById('taskForm');
+
+    taskForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const taskName = document.getElementById('taskName').value;
+        const taskDescription = document.getElementById('taskDescription').value;
+        const taskDueDate = document.getElementById('taskDueDate').value;
+
+        const task = {
+            id: Date.now().toString(),
+            type: 'aviso',
+            name: taskName,
+            description: taskDescription,
+            dueDate: taskDueDate
+        };
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+        window.location.href = 'comenius2.html';
+    });
+});
+
+function resetForm() {
+    document.getElementById('taskForm').reset();
+}
+
+function goToPage(page) {
+    window.location.href = page;
+}
+
+
+</script>
