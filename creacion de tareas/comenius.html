@@ -231,10 +231,125 @@ form input[type="text"], form textarea, form input[type="date"] {
     </header>
     <main class="container">
         <div class="menu-list">
-            <button class="btn" onclick="location.href='comenius10.html'">Crear Aviso</button>
-            <button class="btn" onclick="location.href='comenius20.html'">Crear Aviso de Documento</button>
+            <button class="btn" id="crear-aviso-btn">Crear Aviso</button>
+            <button class="btn" id="crear-aviso-documento-btn">Crear Aviso de Documento</button>
             <button class="btn" onclick="location.href='comenius2.html'">Ir a lista</button>
         </div>
+        <div id="aviso-container"></div>
+        <div id="aviso-documento-container"></div>
     </main>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const crearAvisoBtn = document.getElementById('crear-aviso-btn');
+        const avisoContainer = document.getElementById('aviso-container');
+        const crearAvisoDocumentoBtn = document.getElementById('crear-aviso-documento-btn');
+        const avisoDocumentoContainer = document.getElementById('aviso-documento-container');
+        
+        function clearContainers() {
+            avisoContainer.innerHTML = '';
+            avisoDocumentoContainer.innerHTML = '';
+        }
+        
+        function resetForm() {
+            window.location.href = 'comenius.html';  // Redirige a la pantalla de inicio
+        }
+
+        crearAvisoBtn.addEventListener('click', function() {
+            clearContainers();
+            const avisoHtml = `
+                <h1>Crear Aviso</h1>
+                <form id="taskForm">
+                    <label for="taskName">Nombre de la Tarea</label>
+                    <input type="text" id="taskName" name="taskName" required>
+
+                    <label for="taskDescription">Descripción de la Tarea</label>
+                    <textarea id="taskDescription" name="taskDescription" required></textarea>
+
+                    <label for="taskDueDate">Fecha Límite de Entrega</label>
+                    <input type="date" id="taskDueDate" name="taskDueDate" required>
+
+                    <button type="submit" class="btn">Enviar</button>
+                    <button type="button" class="btn" onclick="resetForm()">Cancelar</button>
+                </form>
+            `;
+
+            avisoContainer.innerHTML = avisoHtml;
+
+            // Agrega el evento de submit al formulario
+            const taskForm = document.getElementById('taskForm');
+            taskForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const taskName = document.getElementById('taskName').value;
+                const taskDescription = document.getElementById('taskDescription').value;
+                const taskDueDate = document.getElementById('taskDueDate').value;
+
+                const task = {
+                    id: Date.now().toString(),
+                    type: 'aviso',
+                    name: taskName,
+                    description: taskDescription,
+                    dueDate: taskDueDate
+                };
+
+                let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                tasks.push(task);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+
+                window.location.href = 'comenius2.html';
+            });
+        });
+
+        crearAvisoDocumentoBtn.addEventListener('click', function() {
+            clearContainers();
+            const avisoDocumentoHtml = `
+                <h1>Crear Aviso de Documento</h1>
+                <form id="documentoForm">
+                    <label for="documentoName">Nombre del Documento</label>
+                    <input type="text" id="documentoName" name="documentoName" required>
+
+                    <label for="documentoDescription">Descripción del Documento</label>
+                    <textarea id="documentoDescription" name="documentoDescription" required></textarea>
+
+                    <label for="documentoFile">Archivo del Documento</label>
+                    <input type="file" id="documentoFile" name="documentoFile" required>
+
+                    <button type="submit" class="btn">Enviar</button>
+                    <button type="button" class="btn" onclick="resetForm()">Cancelar</button>
+                </form>
+            `;
+
+            avisoDocumentoContainer.innerHTML = avisoDocumentoHtml;
+
+            // Agrega el evento de submit al formulario
+            const documentoForm = document.getElementById('documentoForm');
+            documentoForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const documentoName = document.getElementById('documentoName').value;
+                const documentoDescription = document.getElementById('documentoDescription').value;
+                const documentoFile = document.getElementById('documentoFile').files[0];
+
+                const documento = {
+                    id: Date.now().toString(),
+                    type: 'documento',
+                    name: documentoName,
+                    description: documentoDescription,
+                    file: documentoFile
+                };
+
+                let documentos = JSON.parse(localStorage.getItem('documentos')) || [];
+                documentos.push(documento);
+                localStorage.setItem('documentos', JSON.stringify(documentos));
+
+                window.location.href = 'comenius2.html';
+            });
+        });
+    });
+</script>
+
+
+
