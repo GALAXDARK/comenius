@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docente BTI</title>
+</head>
+<body>
+
+<h1>Panel de Docente</h1>
+<div id="clases">
+    <div class="clase">
+        <h2>Clase 1</h2>
+        <button class="entrar">Entrar</button>
+        <button class="eliminar">Eliminar</button>
+        <button class="editar">Editar</button>
+    </div>
+    <div class="clase">
+        <h2>Clase 2</h2>
+        <button class="entrar">Entrar</button>
+        <!-- Sin botones de eliminar y editar -->
+    </div>
+</div>
+
+<script>
+    function enviarClases() {
+        const clases = document.querySelectorAll('#clases .clase');
+        const clasesAEnviar = [];
+
+        clases.forEach(clase => {
+            const btnEntrar = clase.querySelector('.entrar');
+            const btnEliminar = clase.querySelector('.eliminar');
+            const btnEditar = clase.querySelector('.editar');
+
+            // Solo clases con botón "Entrar" y sin botones de eliminar y editar
+            if (btnEntrar && !btnEliminar && !btnEditar) {
+                clasesAEnviar.push(clase.outerHTML);
+            }
+        });
+
+        // Enviar clases al localStorage
+        localStorage.setItem('clasesDocente', JSON.stringify(clasesAEnviar));
+    }
+
+    // Llamar a la función cuando el docente agrega una clase
+    enviarClases();
+</script>
+
+</body>
+</html>

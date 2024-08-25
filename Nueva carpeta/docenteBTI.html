@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplicación de Aula</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* Estilo del encabezado */
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1em 0;
+  text-align: center;
+}
+
+/* Estilo del navegador */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2em;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-links li {
+  margin-left: 1em;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+}
+
+.nav-links a:hover {
+  background-color: #45a049;
+}
+
+main {
+  padding: 2em;
+}
+
+/* Estilo del pie de página */
+footer {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+h2 {
+  color: #4CAF50;
+}
+
+h3 {
+  color: #333;
+}
+
+/* Estilos de lista y elementos de menú */
+.menu-list, .class-list, .task-list, .message-list, .bloc-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.menu-item, .class-card, .task-item, .message-card, .note-item {
+  background-color: white;
+  padding: 1em;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.333% - 1em);
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.5em 1em;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  margin-top: 1em;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+/* Estilos de tabla */
+table {
+  width: 20%;
+  height: 50%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+
+tbody {
+  width: 20%;
+  height: 50%;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 1em;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Estilos específicos para Bloc de Notas */
+.bloc-container {
+  margin-bottom: 2em;
+}
+
+form label {
+  display: block;
+  margin-top: 1em;
+}
+
+form input[type="text"], form textarea, form input[type="date"] {
+  width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.note-item {
+  list-style-type: none;
+  margin-bottom: 1em;
+}
+
+.note-item h4 {
+  margin: 0 0 0.5em 0;
+}
+
+.note-item p {
+  margin: 0.5em 0;
+}
+
+/* Estilos para tablets */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 calc(50% - 1em);
+  }
+}
+
+/* Estilos para móviles */
+@media (max-width: 480px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links li {
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+
+  .menu-item, .class-card, .task-item, .message-card, .note-item {
+    flex: 1 1 100%;
+  }
+
+  main {
+    padding: 1em;
+  }
+
+  header {
+    padding: 0.5em 0;
+  }
+
+  footer {
+    padding: 0.5em 0;
+  }
+
+  .btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+/* Estilo para el cuadro de diálogo */
+.dialog {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1em;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dialog button {
+  margin: 0.5em;
+}
+
+.edit-form {
+  display: none;
+}
+  </style>
+</head>
+<body>
+    <header>
+      <h1>COMENIUS - "EDUCACION PARA TODOS</h1>
+          <ul class="nav-links">
+            <li>
+            <a href="#" id="navInicio">Inicio</a>
+    
+            <a href="#" id="navClases">Clases</a>
+
+            <a href="#" id="navCreacionTareas">Creación de Tareas</a>
+            
+            <a href="#" id="navHorario">Horario</a>
+    
+            <a href="#" id="navPerfil">Perfil</a>
+    
+            <a href="#" id="navBlocNotas">Bloc de Notas</a>
+            </li>
+          </ul>
+      </header>
+    
+
+
+
+
+
+
+
+
+
+      <main id="mainContent">
+
+        <section class="menu-overview">
+          <header><h1>Menú Principal</h1></header>
+          <div class="menu-list">
+            <!-- Elementos de menú principal -->
+            <div class="menu-item" id="viewClasses">
+              <h3>Mis Clases</h3>
+              <p>Ver todas las clases</p>
+            </div>
+            
+            <div class="menu-item" id="viewSchedule">
+              <h3>Horario</h3>
+              <p>Ver horario de clases</p>
+            </div>
+    
+            <div class="menu-item" id="viewProfile">
+              <h3>Perfil</h3>
+              <p>Ver perfil</p>
+            </div>
+    
+            <div class="menu-item" id="viewBlocNotas">
+              <h3>Bloc de Notas</h3>
+              <p>Ver y gestionar notas</p>
+            </div>
+    
+            <div class="menu-item" id="viewCrearTareas">
+              <h3>Creacion de Tareas</h3>
+              <p>Ver la creacion de tareas</p>
+            </div>
+    
+
+          </div>
+        </section>
+    
+
+
+        <!-- Sección de vista de clases -->
+        <section class="class-overview" style="display:none;">
+          <header>
+            <h1>Mis Clases</h1>
+             <!-- Botón para agregar nueva clase -->
+      <button class="btn" id="addNewClassBtn">Agregar nueva clase</button>
+      <button class="btn" id="backToMenuBtn">Volver al Menú</button>
+          </header>
+          <div class="class-list">
+            <!-- Tarjetas de clases -->
+            
+            </div>
+          </div>
+      <!-- Formulario para agregar nueva clase -->
+      <form id="newClassForm" style="display:none;">
+        <label for="newClassTitle">Título de la clase:</label>
+        <input type="text" id="newClassTitle" name="newClassTitle" required>
+        <label for="newClassInstructor">Instructor:</label>
+        <input type="text" id="newClassInstructor" name="newClassInstructor" required>
+        <button class="btn" type="submit">Agregar clase</button>
+      </form>
+    </section>
+    
+
+
+        <!-- Sección de vista de tareas -->
+        <section class="task-overview" style="display:none;">
+          <header>
+            <h2>Tareas</h2>
+          </header>
+          <div class="task-list">
+            <!-- Elementos de tareas -->
+            
+          <!-- Botón para volver al menú -->
+          <button class="btn" id="backToMenuBtnTasks">Volver al Menú</button>
+        </section>
+
+
+
+        <!-- Sección de vista de Creacion de Tareas -->
+        <section id="creacionTareasSection" style="display:none;">
+          <header>
+            <h1>Comenius - Crear Tareas</h1>
+              <button class="btn" id="crear-aviso-btn">Crear Aviso</button>
+              <button class="btn" id="crear-aviso-documento-btn">Crear Aviso de Documento</button>
+              <button class="btn" onclick="location.href='comenius2.html'">Ir a lista</button>
+          </header>
+          <main class="container">
+           
+          <div id="aviso-container"></div>
+          <div id="aviso-documento-container"></div>
+          </main>
+        </section>
+
+
+
+        <!-- Sección de vista de horario -->
+        <section class="schedule-overview" style="display:none;">
+          <header>
+            <h1>Horario de Clases</h1>
+            <button class="btn" id="btnBti">BTI</button>
+            <button class="btn" id="btnBatam">BATAM</button>
+            <button class="btn" id="btnSalud">Salud</button>
+          </header>
+          <div id="btiSchedule" style="display: none;">
+          <table class="mi-tabla">
+            <thead>
+              <tr>
+                <th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td>7:00 - 7:40</td><td>Orientacion</td><td>Literatura</td><td>Matematica</td><td>Psicologia</td><td>Historia y Geografia</td>
+              </tr>
+
+              <tr>
+                <td>7:40 - 8:20</td><td>Orientacion</td><td>Literatura</td><td>Matematica</td><td>Psicologia</td><td>Historia y Geografia</td>
+              </tr>
+
+              <tr>
+                <td>8:40 - 9:15</td>  <td>Ciencias Naturales</td><td>Metodologia</td><td>Metodologia</td><td>Algoritmia</td><td>Ingles</td>
+              </tr>
+
+              <tr>
+                <td>9:15 - 9:50</td><td>Ciencias Naturales</td><td>Metodologia</td><td>Metodologia</td><td>Algoritmia</td><td>Ingles</td> 
+              </tr>
+
+              <tr>
+                <td>9:50 - 10:25</td><td>Economia</td><td>Literatura</td><td>Matematica</td><td>Algoritmia</td><td>Educacion Fisica</td>
+              </tr>
+
+              <tr>
+                <td>10:25 - 11:00</td><td>Economia</td><td>Literatura</td><td>Matemática</td><td>Algoritmia</td><td>Educacion Fisica</td>
+              </tr>
+
+              <tr>
+                <td>11:15 - 11:50</td> <td>x</td><td>Guarani</td><td>Almuerzo</td> <td>Almuerzo</td><td>Almuerzo</td>
+              </tr>
+
+              <tr>
+                <td>11:50 - 12:25</td><td>x</td><td>Guarani</td><td>Almuerzo</td><td>Almuerzo</td><td>Almuerzo</td>
+              </tr>
+
+              <tr>
+                <td>12:25 - 13:00</td><td>x</td><td>Almuerzo</td><td>Almuerzo</td><td>Almuerzo</td><td>x</td>
+              </tr>  
+
+              <tr>
+              <td>13:00 - 13:30</td><td>x</td><td>x</td><td>Desarrollo</td><td>Laboratorio</td><td>Matematica Aplicada</td>
+              </tr>    
+
+              <tr>
+              <td>13:30 - 14:00</td><td>x</td><td>x</td> <td>Desarrollo</td><td>Laboratorio</td><td>Matematica Aplicada</td>
+              </tr> 
+
+              <tr>  
+              <td>14:00 - 14:30</td><td>x</td> <td>x</td> <td>Desarrollo</td><td>Laboratorio</td><td>Matematica Aplicada</td>
+              </tr>
+
+              <tr>   
+              <td>14:30 - 15:00</td><td>x</td><td>x</td><td>Desarrollo</td><td>Laboratorio</td><td>Matematica Aplicada</td>
+              </tr> 
+
+              <tr>   
+              <td>15:20 - 15:50</td><td>x</td><td>x</td><td>x</td><td>Laboratorio</td> <td>Administracion Financiera</td>
+              </tr>   
+
+              <tr>
+              <td>15:50 - 16:20</td><td>x</td><td>x</td><td>x</td><td>Laboratorio</td><td>Administracion Financiera</td>
+              </tr>   
+
+              <tr>
+              <td>16:20 - 16:50</td><td>x</td><td>x</td><td>x</td><td>x</td><td>Administracion Financiera</td>
+              </tr>                     
+            </tbody>
+          </table>
+        </div>
+
+        <div id="batamSchedule" style="display: none;">
+          <table class="mi-tabla">
+            <thead>
+              <tr>
+                <th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td>7:00 - 7:40</td> <td>Orientacion</td><td>Literatura</td> <td>Matematica</td><td>Psicologia</td><td>Historia y Geografia</td>
+              </tr>
+              
+              <tr>
+                <td>7:40 - 8:20</td> <td>Orientacion</td> <td>Literatura</td> <td>Matematica</td> <td>Psicologia</td> <td>Historia y Geografia</td>
+              </tr>
+
+              <tr>
+                <td>8:40 - 9:15</td> <td>Ciencias Naturales</td> <td>Metodologia</td> <td>Metodologia</td> <td>Administracion</td> <td>Ingles</td>
+              </tr>
+
+              <tr>
+                <td>9:15 - 9:50</td> <td>Ciencias Naturales</td> <td>Metodologia</td> <td>Metodologia</td> <td>Administracion</td> <td>Ingles</td>                      
+              </tr>
+
+              <tr>
+                <td>9:50 - 10:25</td> <td>Economia</td> <td>Literatura</td> <td>Matematica</td> <td>Administracion</td> <td>Educacion Fisica</td>
+              </tr>
+
+              <tr>
+                <td>10:25 - 11:00</td> <td>Economia</td> <td>Literatura</td> <td>Matemática</td> <td>Administracion</td> <td>Educacion Fisica</td>
+              </tr>
+
+              <tr>
+                <td>11:15 - 11:50</td> <td>Informatica</td> <td>Guarani</td><td>Almuerzo</td> <td>Mercadotecnia</td> <td>Almuerzo</td>
+              </tr>
+
+              <tr>
+                <td>11:50 - 12:25</td> <td>Informatica</td> <td>Guarani</td> <td>Almuerzo</td> <td>Mercadotecnia</td> <td>Almuerzo</td>
+              </tr>
+
+              <tr>
+                <td>12:25 - 13:00</td> <td>x</td> <td>x</td> <td>Almuerzo</td> <td>x</td> <td>Almuerzo</td>
+              </tr>   
+
+              <tr>
+              <td>13:00 - 13:30</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>Economia</td>
+              </tr> 
+
+              <tr>
+              <td>13:30 - 14:00</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>Economia</td>
+              </tr>    
+              
+              <tr>
+              <td>14:00 - 14:30</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>Proyecto</td>
+              </tr>    
+
+              <tr>
+              <td>14:30 - 15:00</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>Proyecto</td>
+              </tr>   
+
+              <tr>
+              <td>15:20 - 15:50</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>Proyecto</td>
+              </tr>   
+
+              <tr>
+              <td>15:50 - 16:20</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>x</td>
+              </tr>   
+
+              <tr>
+              <td>16:20 - 16:50</td> <td>x</td> <td>x</td> <td>Contabilidad</td> <td>x</td> <td>x</td>
+              </tr>   
+
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="saludSchedule" style="display: none;">
+            <table class="mi-tabla">
+              <thead>
+                <tr>
+                  <th>Hora</th> <th>Lunes</th> <th>Martes</th> <th>Miércoles</th> <th>Jueves</th> <th>Viernes</th>
+                </tr>
+              </thead>
+              <tbody>
+  
+                <tr>
+                  <td>7:00 - 7:40</td> <td>Orientacion</td><td>Literatura</td> <td>Matematica</td><td>Psicologia</td><td>Historia y Geografia</td>
+                </tr>
+                
+                <tr>
+                  <td>7:40 - 8:20</td> <td>Orientacion</td> <td>Literatura</td> <td>Matematica</td> <td>Psicologia</td> <td>Historia y Geografia</td>
+                </tr>
+  
+                <tr>
+                  <td>8:40 - 9:15</td> <td>Ciencias Naturales</td> <td>Metodologia</td> <td>Metodologia</td> <td>Practica Comunitaria</td> <td>Ingles</td>
+                </tr>
+  
+                <tr>
+                  <td>9:15 - 9:50</td> <td>Ciencias Naturales</td> <td>Metodologia</td> <td>Metodologia</td> <td>Practica Comunitaria</td> <td>Ingles</td>                      
+                </tr>
+  
+                <tr>
+                  <td>9:50 - 10:25</td> <td>Economia</td> <td>Literatura</td> <td>Matematica</td> <td>Practica Comunitaria</td> <td>Educacion Fisica</td>
+                </tr>
+  
+                <tr>
+                  <td>10:25 - 11:00</td> <td>Economia</td> <td>Literatura</td> <td>Matemática</td> <td>Practica Comunitaria</td> <td>Educacion Fisica</td>
+                </tr>
+  
+                <tr>
+                  <td>11:15 - 11:50</td> <td>Informatica</td> <td>Guarani</td><td>Almuerzo</td> <td>Practica Comunitaria</td> <td>Almuerzo</td>
+                </tr>
+  
+                <tr>
+                  <td>11:50 - 12:25</td> <td>Informatica</td> <td>Guarani</td> <td>Almuerzo</td> <td>Practica Comunitaria</td> <td>Almuerzo</td>
+                </tr>
+  
+                <tr>
+                  <td>12:25 - 13:00</td> <td>Almuerzo</td> <td>Almuerzo</td> <td>Almuerzo</td> <td>x</td> <td>Almuerzo</td>
+                </tr>   
+  
+                <tr>
+                <td>13:00 - 13:30</td> <td>Atencion Basica</td> <td>Salud Publica</td> <td>Educ.para la Salud</td> <td>x</td> <td>Patologia</td>
+                </tr> 
+  
+                <tr>
+                <td>13:30 - 14:00</td> <td>Atencion Basica</td> <td>Salud Publica</td> <td>Educ.para la Salud</td> <td>x</td> <td>Patologia</td>
+                </tr>    
+                
+                <tr>
+                <td>14:00 - 14:30</td> <td>Atencion Basica</td> <td>Salud Publica</td> <td>Educ.para la Salud</td> <td>x</td> <td>Patologia</td>
+                </tr>    
+  
+                <tr>
+                <td>14:30 - 15:00</td> <td>Atencion Basica</td> <td>Salud Publica</td> <td>Educ.para la Salud</td> <td>x</td> <td>Patologia</td>
+                </tr>   
+  
+                <tr>
+                <td>15:20 - 15:50</td> <td>x</td> <td>Salud Publica</td> <td>Nutricion</td> <td>x</td> <td>Patologia</td>
+                </tr>   
+  
+                <tr>
+                <td>15:50 - 16:20</td> <td>x</td> <td>x</td> <td>Nutricion</td> <td>x</td> <td>x</td>
+                </tr>   
+  
+                <tr>
+                <td>16:20 - 16:50</td> <td>x</td> <td>x</td> <td>Nutricion</td> <td>x</td> <td>x</td>
+                </tr>   
+  
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Botón para volver al menú -->
+          <button class="btn" id="backToMenuBtnSchedule">Volver al Menú</button>
+        </section>
+    
+
+
+        <!-- Sección de vista de perfil -->
+        <section class="profile-overview" style="display:none;">
+          <header><h1>Perfil</h1></header>
+          <p><strong>Nombre:</strong> Leonardo Lucena</p>
+          <p><strong>Correo electrónico:</strong> Leo </p>
+          <p><strong>Teléfono:</strong> 12345</p>
+          <!-- Botón para volver al menú -->
+          <button class="btn" id="backToMenuBtnProfile">Volver al Menú</button>
+        </section>
+
+
+
+        <!-- Sección de vista de Bloc de Notas -->
+        <section class="bloc-notas-overview" style="display:none;">
+          <header><h1>Bloc de Notas</h1></header>
+          <div class="bloc-container">
+            <form id="noteForm">
+              <label for="noteTitle">Título:</label>
+              <input type="text" id="noteTitle" name="noteTitle" required>
+              <label for="noteContent">Contenido:</label>
+              <textarea id="noteContent" name="noteContent" required></textarea>
+              <label for="noteDate">Fecha:</label>
+              <input type="date" id="noteDate" name="noteDate" required>
+              <button class="btn" type="submit">Añadir Nota</button>
+            </form>
+
+            <h3>Mis Notas</h3>
+            <ul id="notesList" class="bloc-list">
+              <!-- Elementos de notas -->
+              <li class="note-item">
+                <h4>Nota 1</h4>
+                <p>Contenido de la nota 1</p>
+                <p><strong>Fecha:</strong> 2023-07-01</p>
+              </li>
+            </ul>
+
+          </div>
+          <!-- Botón para volver al menú -->
+          <button class="btn" id="backToMenuBtnBlocNotas">Volver al Menú</button>
+        </section>
+      </main>
+
+      <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const navInicio = document.getElementById('navInicio');
+    const navClases = document.getElementById('navClases');
+    const navCreacionTareas = document.getElementById('navCreacionTareas')
+    
+    const navHorario = document.getElementById('navHorario');
+    const navPerfil = document.getElementById('navPerfil');
+    const navBlocNotas = document.getElementById('navBlocNotas');
+
+    const mainContent = document.getElementById('mainContent');
+    const classOverview = document.querySelector('.class-overview');
+    
+    const scheduleOverview = document.querySelector('.schedule-overview');
+    const profileOverview = document.querySelector('.profile-overview');
+    const blocNotasOverview = document.querySelector('.bloc-notas-overview');
+
+    const backToMenuBtns = document.querySelectorAll('.btn[id^="backToMenuBtn"]');
+
+    // Función para mostrar la sección correspondiente y ocultar las demás
+    function showSection(section) {
+      mainContent.querySelectorAll('section').forEach(s => s.style.display = 'none');
+      section.style.display = 'block';
+    }
+
+    // Asignar eventos de clic a los elementos de navegación
+    navInicio.addEventListener('click', () => showSection(mainContent.querySelector('.menu-overview')));
+    navClases.addEventListener('click', () => showSection(classOverview));
+    navCreacionTareas.addEventListener('click', () => showSection(creacionTareasSection));
+    navHorario.addEventListener('click', () => showSection(scheduleOverview));
+    navPerfil.addEventListener('click', () => showSection(profileOverview));
+    navBlocNotas.addEventListener('click', () => showSection(blocNotasOverview));
+
+    // Asignar eventos de clic a los botones de volver al menú
+    backToMenuBtns.forEach(btn => btn.addEventListener('click', () => showSection(mainContent.querySelector('.menu-overview'))));
+
+    // Asignar eventos de clic a los elementos del menú principal
+    document.getElementById('viewClasses').addEventListener('click', () => showSection(classOverview));
+    document.getElementById('viewCrearTareas').addEventListener('click', () => showSection(creacionTareasSection));
+    document.getElementById('viewSchedule').addEventListener('click', () => showSection(scheduleOverview));
+    document.getElementById('viewProfile').addEventListener('click', () => showSection(profileOverview));
+    document.getElementById('viewBlocNotas').addEventListener('click', () => showSection(blocNotasOverview));
+    
+    // Referencias a elementos del DOM
+    const addNewClassBtn = document.getElementById('addNewClassBtn');
+    const newClassForm = document.getElementById('newClassForm');
+    const classList = document.querySelector('.class-list');
+
+    // Botón para agregar nueva clase
+    addNewClassBtn.addEventListener('click', () => {
+      newClassForm.style.display = 'block';
+    });
+
+    // Evento de submit para agregar nueva clase
+    newClassForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const title = newClassForm.newClassTitle.value;
+      const instructor = newClassForm.newClassInstructor.value;
+      addClass(title, instructor);
+      newClassForm.reset();
+      newClassForm.style.display = 'none';
+    });
+
+    // Función para agregar una clase
+    function addClass(title, instructor) {
+      const newClassCard = document.createElement('div');
+      newClassCard.classList.add('class-card');
+      newClassCard.innerHTML = `
+        <h3>${title}</h3>
+        <p>Instructor: ${instructor}</p>
+        <button class="btn">Entrar</button>
+        <button class="btn delete-class-btn">Eliminar clase</button>
+        <button class="btn edit-class-btn">Editar clase</button>
+        <div class="edit-form">
+          <label for="editClassTitle">Título de la clase:</label>
+          <input type="text" class="editClassTitle" required>
+          <label for="editClassInstructor">Instructor:</label>
+          <input type="text" class="editClassInstructor" required>
+          <button class="btn save-edit-btn">Guardar</button>
+          <button class="btn cancel-edit-btn">Cancelar</button>
+        </div>
+      `;
+
+      classList.appendChild(newClassCard);
+
+      // Asignar eventos a los botones de la nueva clase
+      const deleteBtn = newClassCard.querySelector('.delete-class-btn');
+      const editBtn = newClassCard.querySelector('.edit-class-btn');
+      const saveEditBtn = newClassCard.querySelector('.save-edit-btn');
+      const cancelEditBtn = newClassCard.querySelector('.cancel-edit-btn');
+      const editForm = newClassCard.querySelector('.edit-form');
+
+      deleteBtn.addEventListener('click', () => confirmDelete(newClassCard));
+      editBtn.addEventListener('click', () => {
+        editForm.style.display = 'block';
+        newClassCard.querySelector('.editClassTitle').value = title;
+        newClassCard.querySelector('.editClassInstructor').value = instructor;
+      });
+      saveEditBtn.addEventListener('click', (e) => saveEdit(e, newClassCard));
+      cancelEditBtn.addEventListener('click', () => editForm.style.display = 'none');
+    }
+
+    const btnBti = document.getElementById('btnBti');
+  const btnBatam = document.getElementById('btnBatam');
+  const btnSalud = document.getElementById('btnSalud');
+  const btiSchedule = document.getElementById('btiSchedule');
+  const batamSchedule = document.getElementById('batamSchedule');
+  const saludSchedule = document.getElementById('saludSchedule');
+
+  btnBti.addEventListener('click', () => {
+    btiSchedule.style.display = 'block';
+    batamSchedule.style.display = 'none';
+    saludSchedule.style.display = 'none';
+  });
+
+  btnBatam.addEventListener('click', () => {
+    btiSchedule.style.display = 'none';
+    batamSchedule.style.display = 'block';
+    saludSchedule.style.display = 'none';
+  });
+
+  btnSalud.addEventListener('click', () => {
+    btiSchedule.style.display = 'none';
+    batamSchedule.style.display = 'none';
+    saludSchedule.style.display = 'block';
+  });
+
+    // Función para confirmar eliminación de clase
+    function confirmDelete(classCard) {
+      const confirmDialog = document.createElement('div');
+      confirmDialog.classList.add('dialog');
+      confirmDialog.innerHTML = `
+        <p>¿Quieres eliminar esta clase?</p>
+        <button class="btn yes-btn">Sí</button>
+        <button class="btn no-btn">No</button>
+      `;
+      document.body.appendChild(confirmDialog);
+      confirmDialog.style.display = 'block';
+
+      const yesBtn = confirmDialog.querySelector('.yes-btn');
+      const noBtn = confirmDialog.querySelector('.no-btn');
+
+      yesBtn.addEventListener('click', () => {
+        classCard.remove();
+        confirmDialog.remove();
+      });
+
+      noBtn.addEventListener('click', () => {
+        confirmDialog.remove();
+      });
+    }
+
+    // Función para guardar cambios de edición
+    function saveEdit(event, classCard) {
+      event.preventDefault();
+      const newTitle = classCard.querySelector('.editClassTitle').value;
+      const newInstructor = classCard.querySelector('.editClassInstructor').value;
+      classCard.querySelector('h3').textContent = newTitle;
+      classCard.querySelector('p').textContent = `Instructor: ${newInstructor}`;
+      classCard.querySelector('.edit-form').style.display = 'none';
+    }
+
+    // Añadir funcionalidades a las clases existentes
+    document.querySelectorAll('.class-card').forEach(card => {
+      const title = card.querySelector('h3').textContent;
+      const instructor = card.querySelector('p').textContent.replace('Instructor: ', '');
+      const deleteBtn = document.createElement('button');
+      const editBtn = document.createElement('button');
+      const editForm = document.createElement('div');
+
+      deleteBtn.classList.add('btn', 'delete-class-btn');
+      deleteBtn.textContent = 'Eliminar clase';
+      deleteBtn.addEventListener('click', () => confirmDelete(card));
+      card.appendChild(deleteBtn);
+
+      editBtn.classList.add('btn', 'edit-class-btn');
+      editBtn.textContent = 'Editar clase';
+      editBtn.addEventListener('click', () => {
+        editForm.style.display = 'block';
+        card.querySelector('.editClassTitle').value = title;
+        card.querySelector('.editClassInstructor').value = instructor;
+      });
+      card.appendChild(editBtn);
+
+      editForm.classList.add('edit-form');
+      editForm.innerHTML = `
+        <label for="editClassTitle">Título de la clase:</label>
+        <input type="text" class="editClassTitle" required>
+        <label for="editClassInstructor">Instructor:</label>
+        <input type="text" class="editClassInstructor" required>
+        <button class="btn save-edit-btn">Guardar</button>
+        <button class="btn cancel-edit-btn">Cancelar</button>
+      `;
+      card.appendChild(editForm);
+
+      const saveEditBtn = editForm.querySelector('.save-edit-btn');
+      const cancelEditBtn = editForm.querySelector('.cancel-edit-btn');
+      saveEditBtn.addEventListener('click', (e) => saveEdit(e, card));
+      cancelEditBtn.addEventListener('click', () => editForm.style.display = 'none');
+    });
+
+    // Formulario de Bloc de Notas
+    const noteForm = document.getElementById('noteForm');
+    const notesList = document.getElementById('notesList');
+
+    noteForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const title = noteForm.noteTitle.value;
+      const content = noteForm.noteContent.value;
+      const date = noteForm.noteDate.value;
+
+      const noteItem = document.createElement('li');
+      noteItem.classList.add('note-item');
+      noteItem.innerHTML = `
+        <h4>${title}</h4>
+        <p>${content}</p>
+        <p><strong>Fecha:</strong> ${date}</p>
+      `;
+
+      notesList.appendChild(noteItem);
+
+      noteForm.reset();
+    });
+  });
+
+
+
+
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const admins = JSON.parse(localStorage.getItem('admins')) || [];
+  const superAdminPassword = 'laspalmeras';
+  const superUser = { username: 'luxe', password: 'dark' };
+
+  // Gestión de inicio de sesión de usuario
+  if (document.getElementById('loginForm')) {
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = e.target.username.value;
+      const password = e.target.password.value;
+      const user = users.find(user => user.username === username && user.password === password);
+      if (user) {
+        alert('Inicio de sesión exitoso');
+        // Redirigir a la página principal
+      } else {
+        alert('Usuario o contraseña incorrectos');
+      }
+    });
+  }
+
+  // Gestión de registro de usuario
+  if (document.getElementById('registerForm')) {
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = e.target.newUsername.value;
+      const password = e.target.newPassword.value;
+      users.push({ username, password });
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Usuario registrado exitosamente');
+      window.location.href = 'login.html';
+    });
+  }
+
+  // Gestión de inicio de sesión de administrador
+  if (document.getElementById('adminLoginForm')) {
+    document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = e.target.adminUsername.value;
+      const password = e.target.adminPassword.value;
+      const admin = admins.find(admin => admin.username === username && admin.password === password);
+      if (admin || (username === superUser.username && password === superUser.password)) {
+        alert('Inicio de sesión de administrador exitoso');
+        window.location.href = 'admin-panel.html';
+      } else {
+        alert('Usuario o contraseña incorrectos');
+      }
+    });
+  }
+
+  // Gestión de registro de administrador
+  if (document.getElementById('adminRegisterForm')) {
+    document.getElementById('adminRegisterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const superAdminPwd = e.target.superAdminPassword.value;
+      if (superAdminPwd !== superAdminPassword) {
+        alert('Contraseña de superadministrador incorrecta');
+        return;
+      }
+      const username = e.target.newAdminUsername.value;
+      const password = e.target.newAdminPassword.value;
+      admins.push({ username, password });
+      localStorage.setItem('admins', JSON.stringify(admins));
+      alert('Administrador registrado exitosamente');
+      window.location.href = 'admin-login.html';
+    });
+  }
+
+  // Mostrar lista de usuarios y administradores
+  if (document.getElementById('userList')) {
+    const userList = document.getElementById('userList');
+    users.forEach(user => {
+      const li = document.createElement('li');
+      li.textContent = user.username;
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Eliminar';
+      deleteBtn.addEventListener('click', () => {
+        const index = users.indexOf(user);
+        users.splice(index, 1);
+        localStorage.setItem('users', JSON.stringify(users));
+        userList.removeChild(li);
+      });
+      li.appendChild(deleteBtn);
+      userList.appendChild(li);
+    });
+  }
+
+  if (document.getElementById('adminList')) {
+    const adminList = document.getElementById('adminList');
+    admins.forEach(admin => {
+      const li = document.createElement('li');
+      li.textContent = admin.username;
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Eliminar';
+      deleteBtn.addEventListener('click', () => {
+        const index = admins.indexOf(admin);
+        admins.splice(index, 1);
+        localStorage.setItem('admins', JSON.stringify(admins));
+        adminList.removeChild(li);
+      });
+      li.appendChild(deleteBtn);
+      adminList.appendChild(li);
+    });
+  }
+});
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const crearAvisoBtn = document.getElementById('crear-aviso-btn');
+  const avisoContainer = document.getElementById('aviso-container');
+  const crearAvisoDocumentoBtn = document.getElementById('crear-aviso-documento-btn');
+  const avisoDocumentoContainer = document.getElementById('aviso-documento-container');
+  
+  // Selecciona la sección que contiene el contenido de la página comenius.html
+  const comeniusSection = document.getElementById('comenius-section');
+  
+  function clearContainers() {
+    avisoContainer.innerHTML = '';
+    avisoDocumentoContainer.innerHTML = '';
+  }
+  
+  function resetForm() {
+    // Redirige a la pantalla de inicio de la sección comenius
+    window.location.href = '#comenius-section';
+  }
+
+  crearAvisoBtn.addEventListener('click', function() {
+    clearContainers();
+    const avisoHtml = `
+      <h1>Crear Aviso</h1>
+      <form id="taskForm">
+        <label for="taskName">Nombre de la Tarea</label>
+        <input type="text" id="taskName" name="taskName" required>
+
+        <label for="taskDescription">Descripción de la Tarea</label>
+        <textarea id="taskDescription" name="taskDescription" required></textarea>
+
+        <label for="taskDueDate">Fecha Límite de Entrega</label>
+        <input type="date" id="taskDueDate" name="taskDueDate" required>
+
+        <button type="submit" class="btn">Enviar</button>
+        <button type="button" class="btn" onclick="resetForm()">Cancelar</button>
+      </form>
+    `;
+
+    avisoContainer.innerHTML = avisoHtml;
+
+    // Agrega el evento de submit al formulario
+    const taskForm = document.getElementById('taskForm');
+    taskForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const taskName = document.getElementById('taskName').value;
+      const taskDescription = document.getElementById('taskDescription').value;
+      const taskDueDate = document.getElementById('taskDueDate').value;
+
+      const task = {
+        id: Date.now().toString(),
+        type: 'aviso',
+        name: taskName,
+        description: taskDescription,
+        dueDate: taskDueDate
+      };
+
+      let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.push(task);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+
+      // Redirige a la pantalla de inicio de la sección comenius
+      window.location.href = '#comenius-section';
+    });
+  });
+
+  crearAvisoDocumentoBtn.addEventListener('click', function() {
+    clearContainers();
+    const avisoDocumentoHtml = `
+      <h1>Crear Aviso de Documento</h1>
+      <form id="documentoForm">
+        <label for="documentoName">Nombre del Documento</label>
+        <input type="text" id="documentoName" name="documentoName" required>
+
+        <label for="documentoDescription">Descripción del Documento</label>
+        <textarea id="documentoDescription" name="documentoDescription" required></textarea>
+
+        <label for="documentoFile">Archivo del Documento</label>
+        <input type="file" id="documentoFile" name="documentoFile" required>
+
+        <button type="submit" class="btn">Enviar</button>
+        <button type="button" class="btn" onclick="resetForm()">Cancelar</button>
+      </form>
+    `;
+
+    avisoDocumentoContainer.innerHTML = avisoDocumentoHtml;
+
+    // Agrega el evento de submit al formulario
+    const documentoForm = document.getElementById('documentoForm');
+    documentoForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const documentoName = document.getElementById('documentoName').value;
+      const documentoDescription = document.getElementById('documentoDescription').value;
+      const documentoFile = document.getElementById('documentoFile').files[0];
+
+      const documento = {
+        id: Date.now().toString(),
+        type: 'documento',
+        name: documentoName,
+        description: documentoDescription,
+        file: documentoFile
+      };
+
+      let documentos = JSON.parse(localStorage.getItem('documentos')) || [];
+      documentos.push(documento);
+      localStorage.setItem('documentos', JSON.stringify(documentos));
+
+            // Redirige a la pantalla de inicio de la sección comenius
+            window.location.href = '#comenius-section';
+    });
+  });
+});
+</script>
+</body>
+</html>
